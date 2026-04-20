@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard - Event Management</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9fafc;
+    }
+
+    header {
+      background: #2b6cb0;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    header button {
+      float: right;
+      margin-top: -35px;
+    }
+
+    h1, h2 { margin: 0; }
+    h2 { color: #2b6cb0; margin-bottom: 20px; }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      background: #e2e8f0;
+      padding: 10px;
+    }
+
+    .tabs button {
+      padding: 12px 25px;
+      border: none;
+      margin: 0 10px;
+      font-size: 16px;
+      font-weight: bold;
+      background: #cbd5e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .tabs button.active {
+      background: #2b6cb0;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 30px 50px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+      max-width: 1000px;
+    }
+
+    form input, form select, form button {
+      padding: 10px 12px;
+      margin: 8px 10px 8px 0;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e0;
+    }
+
+    form button {
+      background: #2b6cb0;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background: #2c5282;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #2b6cb0;
+      color: white;
+    }
+
+    td {
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .edit-btn, .delete-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .edit-btn { background-color: #f6ad55; color: #fff; }
+    .delete-btn { background-color: #e53e3e; color: #fff; }
+
+    .edit-btn:hover { background-color: #dd6b20; }
+    .delete-btn:hover { background-color: #c53030; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media screen and (max-width: 768px) {
+      .tab-content { padding: 20px; }
+      form input, form select { width: 100%; margin-bottom: 10px; }
+    }
+     .user-controls img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ff9cd1;
+    }
+   .user-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+@media screen and (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .user-controls {
+    align-self: flex-end;
+  }
+}
+
+
+    .user-controls button {
+      background: #faf4f8;
+      color: #1b07f0df;
+      padding: 9px 15px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(255, 192, 203, 0.5);
+    }
+
+    .user-controls button:hover {
+      background: #fbf7f9;
+      transform: scale(1.05);
+    }
+    header {
+  background: #2b6cb0;
+  color: white;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  font-size: 28px;
+  margin: 0;
+  flex-grow: 1;
+  color: #fff;
+}
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Admin Dashboard</h1>
+      <div class="user-controls">
+    <button onclick="logout()">Logout</button>
+    </div>
+</header>
+
+<div class="tabs">
+  <button onclick="showTab('events')" class="active">Manage Events</button>
+  <button onclick="showTab('feedback')">Manage Feedback</button>
+  <button onclick="showTab('analytics')">View Analytics</button>
+  <button onclick="showTab('reports')">Reports</button>
+</div>
+
+<div id="events" class="tab-content active">
+  <h2>Manage Events</h2>
+  <form id="eventForm">
+    <input type="text" id="eName" placeholder="Event Name" required />
+
+    <select id="eType" required onchange="handleEventTypeChange()">
+      <option value="">Select Event Type</option>
+      <option value="Marriage">Marriage</option>
+      <option value="Birthday">Birthday</option>
+      <option value="Corporate">Corporate</option>
+      <option value="College">College</option>
+    </select>
+    <select id="eMarriageType" style="display: none;">
+      <option value="">Select Marriage Type</option>
+      <option value="Destination">Destination</option>
+      <option value="Temple">Temple</option>
+      <option value="Theme">Theme</option>
+      <option value="Local">Local</option>
+    </select>
+    <select id="eBirthdayTheme" style="display: none;">
+      <option value="">Select Birthday Theme</option>
+      <option value="Kids">Kids</option>
+      <option value="Teen">Teen</option>
+      <option value="Adult">Adult</option>
+      <option value="Surprise">Surprise</option>
+    </select>
+    <select id="eCorporateType" style="display: none;">
+      <option value="">Select Corporate Event Type</option>
+      <option value="Seminar">Seminar</option>
+      <option value="Product Launch">Product Launch</option>
+      <option value="Team Building">Team Building</option>
+      <option value="Annual Meet">Annual Meet</option>
+    </select>
+    <select id="eCollegeType" style="display: none;">
+      <option value="">Select College Event Type</option>
+      <option value="Cultural Fest">Cultural Fest</option>
+      <option value="Technical Fest">Technical Fest</option>
+      <option value="Sports Meet">Sports Meet</option>
+      <option value="Freshers/Graduation">Freshers/Graduation</option>
+    </select>
+    <input type="date" id="eDate" required />
+    <input type="text" id="eLocation" placeholder="Location" required />
+    <input type="number" id="ePrice" placeholder="Price" required />
+    <button type="submit">Add / Update</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Sub-Type</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="eventTable"></tbody>
+  </table>
+</div>
+<div id="feedback" class="tab-content">
+  <h2>Manage Feedback</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Comments</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="feedbackTable"></tbody>
+  </table>
+</div>
+<div id="analytics" class="tab-content">
+  <h2>Analytics</h2>
+  <div style="display: flex; gap: 20px;">
+    <div><strong>Total Events:</strong> <span id="eventCount">0</span></div>
+    <div><strong>Total Feedback:</strong> <span id="feedbackCount">0</span></div>
+  </div>
+  <div style="max-width: 700px; margin: 20px auto;">
+    <canvas id="eventTypeChart"></canvas>
+    <canvas id="eventTypePieChart" style="margin-top: 30px;"></canvas> <!-- ✅ Add this line -->
+    <canvas id="eventTrendChart" style="margin-top: 30px;"></canvas>
+  </div>
+</div>
+
+<div id="reports" class="tab-content">
+  <h2>Reports - Booked Events</h2>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <button onclick="exportReportsToCSV()" style="padding: 8px 14px; background-color: #2b6cb0; color: white; border: none; border-radius: 6px; cursor: pointer;">Export CSV</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>User Name</th>
+        <th>Location</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody id="bookingTable"></tbody>
+  </table>
+</div>
+
+
+
+<script>
+  let editEventId = null;
+
+  function handleEventTypeChange() {
+    const type = document.getElementById("eType").value;
+    const subTypes = ["eMarriageType", "eBirthdayTheme", "eCorporateType", "eCollegeType"];
+    subTypes.forEach(id => document.getElementById(id).style.display = "none");
+
+    if (type === "Marriage") document.getElementById("eMarriageType").style.display = "inline-block";
+    else if (type === "Birthday") document.getElementById("eBirthdayTheme").style.display = "inline-block";
+    else if (type === "Corporate") document.getElementById("eCorporateType").style.display = "inline-block";
+    else if (type === "College") document.getElementById("eCollegeType").style.display = "inline-block";
+  }
+
+  async function fetchEvents() {
+    const res = await fetch("http://localhost:8075/api/event");
+    const data = await res.json();
+    const tbody = document.getElementById("eventTable");
+    tbody.innerHTML = "";
+
+    data.forEach(e => {
+      const subType = e.marriageType || e.birthdayTheme || e.corporateType || e.collegeType || "";
+      const row = document.createElement("tr");
+      row.innerHTML = `
+      <td>${e.name}</td>
+        <td>${e.type}</td>
+        <td>${subType}</td>
+        <td>${e.date}</td>
+        <td>${e.location}</td>
+        <td>${e.price}</td>
+        <td>
+          <button class="edit-btn">Edit</button>
+          <button class="delete-btn">Delete</button>
+        </td>
+      `;
+      row.querySelector(".edit-btn").addEventListener("click", () => editEvent(e));
+      row.querySelector(".delete-btn").addEventListener("click", () => deleteEvent(e.id));
+      tbody.appendChild(row);
+    });
+  }
+
+  function editEvent(e) {
+    editEventId = e.id;
+    eName.value = e.name;
+    eType.value = e.type;
+    eDate.value = e.date;
+    eLocation.value = e.location;
+    ePrice.value = e.price;
+    handleEventTypeChange();
+    setTimeout(() => {
+      if (e.type === "Marriage") document.getElementById("eMarriageType").value = e.marriageType || "";
+      else if (e.type === "Birthday") document.getElementById("eBirthdayTheme").value = e.birthdayTheme || "";
+      else if (e.type === "Corporate") document.getElementById("eCorporateType").value = e.corporateType || "";
+      else if (e.type === "College") document.getElementById("eCollegeType").value = e.collegeType || "";
+    }, 50);
+  }
+
+  async function deleteEvent(id) {
+    await fetch(`http://localhost:8075/api/event/${id}`, { method: "DELETE" });
+    fetchEvents();
+  }
+
+  document.getElementById("eventForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const type = eType.value;
+    const event = {
+      name: eName.value,
+      type,
+      date: eDate.value,
+      location: eLocation.value,
+      price: parseFloat(ePrice.value)
+    };
+    if (type === "Marriage") event.marriageType = document.getElementById("eMarriageType").value;
+    else if (type === "Birthday") event.birthdayTheme = document.getElementById("eBirthdayTheme").value;
+    else if (type === "Corporate") event.corporateType = document.getElementById("eCorporateType").value;
+    else if (type === "College") event.collegeType = document.getElementById("eCollegeType").value;
+
+    const url = editEventId
+      ? `http://localhost:8075/api/event/${editEventId}`
+      : `http://localhost:8075/api/event`;
+    const method = editEventId ? "PUT" : "POST";
+
+    await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(event)
+    });
+
+    editEventId = null;
+    e.target.reset();
+    handleEventTypeChange();
+    fetchEvents();
+  });
+  async function fetchFeedback() {
+  const res = await fetch("http://localhost:8075/api/feedback");
+  const data = await res.json();
+  const tbody = document.getElementById("feedbackTable");
+  tbody.innerHTML = "";
+
+  data.forEach(f => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${f.name}</td>
+      <td>${f.email}</td>
+      <td>${f.comments}</td>
+      <td><button class="delete-btn" onclick="deleteFeedback(${f.id})">Delete</button></td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+async function deleteFeedback(id) {
+  await fetch(`http://localhost:8075/api/feedback/${id}`, { method: "DELETE" });
+  fetchFeedback();
+}
+async function fetchBookings() {
+  const res = await fetch("http://localhost:8075/api/bookings");
+  const data = await res.json();
+
+  console.log("Raw booking data:", data); // 🐞 Check structure
+
+  const tbody = document.getElementById("bookingTable");
+  tbody.innerHTML = "";
+
+  data.forEach(b => {
+    const fullName = b.full_name || b.fullName || "N/A";
+    const eventName = b.event_name || b.eventName || "N/A";
+    const date = b.date || "N/A";
+    const location = b.location || "N/A";
+    const phone = b.phone || "N/A";
+    const email = b.email || "N/A";
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${fullName}</td>
+      <td>${eventName}</td>
+      <td>${date}</td>
+      <td>${location}</td>
+      <td>${phone}</td>
+      <td>${email}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+  let chartInstance;
+  let pieChartInstance;
+  let trendChartInstance;
+
+  async function fetchAnalytics() {
+    document.getElementById("loading")?.style?.setProperty("display", "block");
+
+    const res = await fetch("http://localhost:8075/api/event");
+    const events = await res.json();
+    document.getElementById("eventCount").textContent = events.length;
+
+    const feedbackRes = await fetch("http://localhost:8075/api/feedback");
+    const feedbacks = await feedbackRes.json();
+    document.getElementById("feedbackCount").textContent = feedbacks.length;
+
+    generateEventTypeChart(events);
+    generateEventTypePieChart(events);
+    generateEventTrendChart(events);
+
+    document.getElementById("loading")?.style?.setProperty("display", "none");
+  }
+
+  // 📊 BAR Chart - Event type count
+  function generateEventTypeChart(events) {
+    const typeCount = {};
+    events.forEach(e => {
+      typeCount[e.type] = (typeCount[e.type] || 0) + 1;
+    });
+
+    const ctx = document.getElementById("eventTypeChart").getContext("2d");
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(typeCount),
+        datasets: [{
+          label: 'Events by Type',
+          data: Object.values(typeCount),
+          backgroundColor: '#2b6cb0'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Event Type Distribution'
+          }
+        }
+      }
+    });
+  }
+
+  // 🥧 PIE Chart - Event type share
+  function generateEventTypePieChart(events) {
+    const typeCount = {};
+    events.forEach(e => {
+      typeCount[e.type] = (typeCount[e.type] || 0) + 1;
+    });
+
+    const ctx = document.getElementById("eventTypePieChart").getContext("2d");
+    if (pieChartInstance) pieChartInstance.destroy();
+
+    pieChartInstance = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: Object.keys(typeCount),
+        datasets: [{
+          data: Object.values(typeCount),
+          backgroundColor: [
+            '#fcb1c1', '#a3c9f9', '#ffe9a7', '#b9fbc0', '#e2b5ff', '#ffd6d6'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Event Type Share (Pie Chart)'
+          },
+          legend: {
+            position: 'right'
+          }
+        }
+      }
+    });
+  }
+
+  // 📈 LINE Chart - Monthly trend
+  function generateEventTrendChart(events) {
+    const monthly = {};
+    events.forEach(e => {
+      const month = e.date?.substring(0, 7); // "YYYY-MM"
+      if (month) {
+        monthly[month] = (monthly[month] || 0) + 1;
+      }
+    });
+
+    const ctx = document.getElementById("eventTrendChart").getContext("2d");
+    if (trendChartInstance) trendChartInstance.destroy();
+
+    trendChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Object.keys(monthly),
+        datasets: [{
+          label: 'Events Over Time',
+          data: Object.values(monthly),
+          borderColor: '#2b6cb0',
+          backgroundColor: 'rgba(43, 108, 176, 0.2)',
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Monthly Event Trends'
+          }
+        }
+      }
+    });
+  }
+
+  window.onload = fetchAnalytics;
+
+
+async function fetchBookings() {
+  const res = await fetch("http://localhost:8075/api/bookings");
+  const data = await res.json();
+  window.allBookings = data; // store globally for filtering/export
+  displayBookings(data);
+}
+
+function displayBookings(bookings) {
+  const tbody = document.getElementById("bookingTable");
+  tbody.innerHTML = "";
+
+  bookings.forEach(b => {
+    const fullName = b.fullName || b.full_name || "N/A";
+    const eventType = b.eventName || b.event_name || b.type || "N/A"; // flexible mapping
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${fullName}</td>
+      <td>${b.location || "N/A"}</td>
+      <td>${b.phone || "N/A"}</td>
+      <td>${b.email || "N/A"}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+
+
+function exportReportsToCSV() {
+  const rows = [
+    ["User Name", "Type", "Date", "Location", "Phone", "Email"],
+    ...window.allBookings.map(b => [b.userName, b.type, b.date, b.location, b.phone, b.email])
+  ];
+
+  const csvContent = rows.map(r => r.join(",")).join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "booked_events_report.csv";
+  a.click();
+}
+
+async function deleteEvent(id) {
+  const confirmDelete = confirm("Are you sure you want to delete this event?");
+  if (!confirmDelete) return;
+
+  await fetch(`http://localhost:8075/api/event/${id}`, {
+    method: "DELETE"
+  });
+
+  fetchEvents();
+}
+
+
+
+  function logout() {
+    window.location.href = "register.html";
+  }
+  
+
+function showTab(id) {
+  document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
+  document.querySelector(`.tabs button[onclick="showTab('${id}')"]`).classList.add("active");
+
+  if (id === "events") fetchEvents();
+  else if (id === "feedback") fetchFeedback();
+  else if (id === "analytics") fetchAnalytics();
+  else if (id === "reports") fetchBookings();
+}
+ function logout() {
+      localStorage.clear();
+      window.location.href = "register.html";
+    }
+  
+
+  fetchEvents();
+</script>
+</body>
+</html>

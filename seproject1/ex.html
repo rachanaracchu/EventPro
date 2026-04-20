@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Management System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right top, #fff0f5, #f0f8ff);
+      color: #333;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(to right, #b30059, #800080);
+      padding: 16px 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      background-color: #ffd6eb;
+      color: #4b0049;
+      box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
+    }
+
+    .user-controls {
+      position: absolute;
+      top: 18px;
+      right: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-controls img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      cursor: pointer;
+    }
+
+    .user-controls button {
+      background: #ffd1dc;
+      color: #80004d;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .user-controls button:hover {
+      background: #ff99cc;
+      box-shadow: 0 4px 12px rgba(255, 182, 193, 0.5);
+    }
+
+    /* Hero Section */
+    .hero-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 70px 20px;
+    }
+
+    .hero-card {
+      background: linear-gradient(to right top, #5f005f, #99004d);
+      border-radius: 20px;
+      padding: 60px 40px;
+      max-width: 720px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-card h1 {
+      font-size: 44px;
+      color: #ffe6f0;
+      text-shadow: 2px 2px 8px #ffb3d9;
+      margin-bottom: 10px;
+    }
+
+    .hero-card h2 {
+      font-size: 24px;
+      color: #ffd1f0;
+      margin-bottom: 16px;
+      font-weight: bold;
+    }
+
+    .hero-card p {
+      font-size: 18px;
+      color: #f0d9ff;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #ff66a3, #cc66ff);
+      color: white;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(204, 102, 255, 0.3);
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #cc66ff, #ff66a3);
+      box-shadow: 0 6px 18px rgba(255, 105, 180, 0.4);
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #555;
+      background-color: #ffe8f0;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero-card h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="feed.html">Feedback</a>
+      <a href="about.html">About</a>
+      <a href="wishlist.html">My Wishlist</a>
+    </nav>
+    <div class="user-controls">
+      <img src="avatar.jpg" alt="Profile" onclick="goToProfile()" />
+      <button onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <section class="hero-wrapper">
+    <div class="hero-card">
+      <h1>Welcome to the Event Hub!</h1>
+      <h2>Celebrate Without The Stress 🎉</h2>
+      <p>Find the perfect venue, explore dreamy themes, and book your big day effortlessly — all in one vibrant platform.</p>
+      <a href="eventlist.html" class="btn">✨ View Events</a>
+    </div>
+  </section>
+
+
+  <script>
+    function goToProfile() {
+      window.location.href = "profile.html";
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "register.html";
+    }
+  </script>
+</body>
+</html>

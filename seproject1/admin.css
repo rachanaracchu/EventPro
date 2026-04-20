@@ -1,0 +1,274 @@
+/* /* .admin-container {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+.add-event-form, .event-list {
+    margin-bottom: 40px;
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.add-event-form form label,
+.add-event-form form input,
+.add-event-form form textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.add-event-form form input,
+.add-event-form form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.event-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.event-list li {
+    margin-bottom: 15px;
+    padding:0;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+  }
+
+  nav ul li {
+    display: inline;
+  }
+
+  nav a {
+    text-decoration: none;
+    padding: 10px 15px;
+    color: #333;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  nav a:hover {
+    background-color: #007BFF;
+    color: white;
+  } */
+   /* admin.css */
+
+/* Reset some basic elements */
+/* Reset some defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Body background and general layout */
+body {
+  background: #f0f4f8;
+  color: #333;
+  padding: 20px;
+}
+
+/* Header section */
+header {
+  background: linear-gradient(to right, #4b6cb7, #182848);
+  padding: 20px;
+  color: white;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+}
+
+header nav {
+  margin-top: 10px;
+}
+
+header nav button {
+  background: #ff5e62;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+header nav button:hover {
+  background: #ff1e2d;
+}
+
+/* Main layout */
+.admin-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Add Event Form */
+.add-event-form {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.add-event-form h2 {
+  margin-bottom: 15px;
+  color: #4b6cb7;
+}
+
+.add-event-form form input,
+.add-event-form form textarea {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.add-event-form form button {
+  background: #4b6cb7;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-event-form form button:hover {
+  background: #3a549d;
+}
+
+/* Event Table Section */
+.event-list {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.event-list h2 {
+  margin-bottom: 15px;
+  color: #182848;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: #4b6cb7;
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: #f7f9fc;
+}
+
+table tr:hover {
+  background-color: #eef2fb;
+}
+
+table input {
+  width: 95%;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+table button {
+  background: #ff5e62;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+table button:hover {
+  background: #e04348;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  table, table thead, table tbody, table th, table td, table tr {
+    display: block;
+  }
+
+  table td {
+    border: none;
+    padding: 10px 0;
+  }
+
+  table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+  }
+}
+ .user-controls {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-controls img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ff9cd1;
+    }
+
+    .user-controls button {
+      background: #ffe0f7;
+      color: #80004d;
+      padding: 9px 15px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(255, 192, 203, 0.5);
+    }
+
+    .user-controls button:hover {
+      background: #fbb4e0;
+      transform: scale(1.05);
+    }

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+
+  <title>User Profile</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right top, #ffe6f0, #e0f7ff);
+      margin: 0;
+      padding: 40px 15px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease-in-out;
+      border: 2px solid #c0e0ff;
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff5e78;
+      font-size: 30px;
+      margin-bottom: 25px;
+      letter-spacing: 1px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #34495e;
+    }
+
+    select, input[type="text"], input[type="email"], input[type="password"], input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #dcdde1;
+      border-radius: 14px;
+      background: #fefefe;
+      font-size: 16px;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    input[type="file"] {
+      background: #f3faff;
+      border: 2px dashed #a3c8ff;
+      text-align: center;
+      color: #7f8c8d;
+    }
+
+    #profile-image {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 20px;
+      border: 5px solid #1f8ef1;
+      box-shadow: 0 8px 18px rgba(31, 142, 241, 0.2);
+    }
+
+    .profile-display {
+      background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+      padding: 20px 25px;
+      border-radius: 14px;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.05);
+      margin-top: 20px;
+    }
+
+    .info-row {
+      margin-bottom: 14px;
+      font-size: 17px;
+      color: #2c3e50;
+      border-bottom: 1px solid #e6ecf2;
+      padding-bottom: 10px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #1f8ef1, #54d0ff);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 14px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #148fe0, #46c8f0);
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #ff6b6b, #ff9999);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 25px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      transition: background 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: linear-gradient(to right, #e74c3c, #ff7a7a);
+    }
+
+    #password-section,
+    #edit-form {
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+.home-icon {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 22px;
+  background-color: #ffb6c1;
+  color: white;
+  padding: 12px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.home-icon:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 14px #ff80aa;
+}
+
+
+    
+  </style>
+</head>
+
+<body>
+  
+ <a href="home.html" title="Home" class="home-icon">
+  <i class="fas fa-home"></i>
+</a>
+
+  <div class="container">
+    <h2>👤 User Profile</h2>
+
+    <label for="action">Choose Action:</label>
+    <select id="action" onchange="toggleAction()">
+      <option value="view">View Profile</option>
+      <option value="edit">Edit Profile</option>
+      <option value="change-password">Change Password</option>
+    </select>
+
+    <img id="profile-image" src="default.png" alt="Profile" />
+
+    <!-- View Profile -->
+    <div class="profile-display" id="profile-view">
+      <div class="info-row"><strong>Full Name:</strong> <span id="view-fullName"></span></div>
+      <div class="info-row"><strong>Email:</strong> <span id="view-email"></span></div>
+      <div class="info-row"><strong>Phone:</strong> <span id="view-phone"></span></div>
+      <div class="info-row"><strong>City:</strong> <span id="view-city"></span></div>
+      <div class="info-row"><strong>Role:</strong> <span id="view-role"></span></div>
+    </div>
+
+ <!-- Edit Form -->
+<div id="edit-form">
+  <label>Full Name:</label>
+  <input type="text" id="fullName" />
+
+  <label>Email:</label>
+  <input type="email" id="email" disabled /> <!-- Keep disabled if you don't want email to change -->
+
+  <label>Phone:</label>
+  <input type="text" id="phone" />
+
+  <label>City:</label>
+  <input type="text" id="city" />
+
+  <label>Role:</label>
+  <select id="role">
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+  </select>
+
+  <label>Upload Profile Image:</label>
+  <input type="file" id="profileImageInput">
+
+  <button type="button" onclick="uploadImage()" class="btn" id="uploadBtn" disabled>Upload Photo</button>
+  <button type="button" onclick="saveProfile()" class="btn">Save Changes</button>
+</div>
+
+    <!-- Password Change -->
+    <div id="password-section">
+      <label>New Password:</label>
+      <input type="password" id="newPassword" />
+      <button onclick="changePassword()" class="btn">Change Password</button>
+    </div>
+
+    <!-- 🔓 Logout Button at Bottom -->
+    <button class="logout-btn" onclick="logout()">🔓 Logout</button>
+  </div>
+
+  <script>
+    const email = localStorage.getItem("userEmail");
+
+ function loadUser() {
+  fetch(`http://localhost:8075/api/users/${email}`)
+    .then(res => res.json())
+    .then(data => {
+      // View Mode
+      document.getElementById('view-fullName').innerText = data.fullName;
+      document.getElementById('view-email').innerText = data.email;
+      document.getElementById('view-phone').innerText = data.phone;
+      document.getElementById('view-city').innerText = data.city;
+      document.getElementById('view-role').innerText = data.role;
+
+      // Edit Mode
+      document.getElementById('fullName').value = data.fullName;
+      document.getElementById('email').value = data.email;
+      document.getElementById('phone').value = data.phone;
+      document.getElementById('city').value = data.city;
+      document.getElementById('role').value = data.role;
+
+      // Image
+      if (data.profileImage) {
+        document.getElementById("profile-image").src = "data:image/jpeg;base64," + data.profileImage;
+      } else {
+        document.getElementById("profile-image").src = "default.png";
+      }
+    });
+}
+
+
+    function toggleAction() {
+      const action = document.getElementById("action").value;
+      const profileView = document.getElementById("profile-view");
+      const editForm = document.getElementById("edit-form");
+      const passwordSection = document.getElementById("password-section");
+      const profileImage = document.getElementById("profile-image");
+
+      profileView.style.display = "none";
+      editForm.style.display = "none";
+      passwordSection.style.display = "none";
+      profileImage.style.display = "block";
+
+      if (action === "view") {
+        profileView.style.display = "block";
+      } else if (action === "edit") {
+        editForm.style.display = "block";
+      } else if (action === "change-password") {
+        passwordSection.style.display = "block";
+        profileImage.style.display = "none";
+      }
+    }
+
+   function uploadImage() {
+  const fileInput = document.getElementById("profileImageInput");
+  const userEmail = localStorage.getItem("userEmail");
+
+  if (!fileInput || !fileInput.files.length) {
+    alert("Select a file");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("file", fileInput.files[0]);
+  formData.append("email", userEmail);
+
+  fetch("http://localhost:8075/api/users/upload-photo", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.text())
+  .then(alert)
+  .catch(console.error);
+}
+
+  function saveProfile() {
+  const updatedUser = {
+    email: email,
+    fullName: document.getElementById("fullName").value,
+    phone: document.getElementById("phone").value,
+    city: document.getElementById("city").value,
+    role: document.getElementById("role").value
+  };
+
+  if (!updatedUser.fullName || !updatedUser.phone || !updatedUser.city || !updatedUser.role) {
+    Swal.fire({ icon: 'error', title: 'All fields are required' });
+    return;
+  }
+
+  fetch("http://localhost:8075/api/users/update", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedUser)
+  })
+  .then(res => res.text())
+  .then(msg => {
+    Swal.fire({ icon: 'success', title: 'Updated!', text: msg, timer: 2000, showConfirmButton: false });
+    toggleAction();
+    loadUser();
+  });
+}
+
+  
+    function changePassword() {
+      const newPassword = document.getElementById("newPassword").value;
+      if (!newPassword) {
+        Swal.fire({ icon: 'warning', title: 'Password cannot be empty' });
+        return;
+      }
+
+      fetch("http://localhost:8075/api/users/change-password", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, newPassword })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        Swal.fire({ icon: 'success', title: 'Password Changed!', text: msg, timer: 2000, showConfirmButton: false });
+        document.getElementById("newPassword").value = "";
+      });
+    }
+
+    document.getElementById("profileImageInput").addEventListener("change", function () {
+      const file = this.files[0];
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("profile-image").src = e.target.result;
+      };
+      if (file) reader.readAsDataURL(file);
+      document.getElementById("uploadBtn").disabled = !file;
+    });
+
+    function logout() {
+      localStorage.removeItem("userEmail");
+      Swal.fire({
+        icon: 'success',
+        title: 'Logged Out',
+        text: 'Redirecting to login...',
+        timer: 1500,
+        showConfirmButton: false
+      }).then(() => {
+        window.location.href = "register.html";
+      });
+    }
+
+    window.onload = () => {
+      if (!email) {
+        window.location.href = "register.html";
+        return;
+      }
+      document.getElementById("action").value = "view";
+      toggleAction();
+      loadUser();
+    };
+  </script>
+</body>
+</html>

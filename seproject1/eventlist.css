@@ -1,0 +1,197 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9f9fb;
+  color: #333;
+}
+
+/* Header Styling */
+header {
+  background-color: #a10058;
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 4px 12px rgba(160, 0, 88, 0.4);
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+nav a {
+  text-decoration: none;
+  padding: 10px 15px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #a10058;
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+nav a:hover {
+  background-color: #ff80ab;
+  color: white;
+}
+
+/* Container Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+/* Headings and Text */
+.container h1 {
+  font-size: 3rem;
+  color: #800080;
+  font-weight: 900;
+  text-shadow: 2px 2px 6px rgba(255, 192, 203, 0.6);
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1.8rem;
+  color: #d6336c;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(255, 192, 203, 0.5);
+  margin-bottom: 5px;
+}
+
+.description {
+  font-size: 1.3rem;
+  color: #333;
+  font-weight: 500;
+  text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1);
+  margin-bottom: 40px;
+}
+
+/* Card Layout */
+.card {
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 20px;
+  max-width: 600px;
+  display: inline-block;
+  text-align: left;
+  background-color: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Images */
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Card Content */
+.card-content {
+  padding: 20px;
+  border-top: 4px solid;
+  color: #fff;
+}
+
+.card-content h2 {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.card-content p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0.5px 0.5px 2px rgba(0,0,0,0.2);
+}
+
+
+
+
+/* Card Color Themes */
+.card:nth-of-type(1) .card-content {
+  background: linear-gradient(to right, #ffafcc, #ffc8dd);
+  border-color: #ff85a2;
+  color: #a1005f;
+  text-shadow: 0 0 3px #ffcce5;
+}
+
+.card:nth-of-type(2) .card-content {
+  background: linear-gradient(to right, #fcd5ce, #fae1dd);
+  border-color: #f4978e;
+}
+
+.card:nth-of-type(3) .card-content {
+  background: linear-gradient(to right, #caffbf, #9bf6ff);
+  border-color: #80ed99;
+}
+
+.card:nth-of-type(4) .card-content {
+  background: linear-gradient(to right, #bdb2ff, #a0c4ff);
+  border-color: #9d4edd;
+}
+/* Card 1: Weddings (Pink Theme) */
+.card:nth-of-type(1) .card-content h2,
+.card:nth-of-type(1) .card-content p {
+  color: #a1005f;
+  text-shadow: 0 0 3px #ffcce5;
+}
+
+/* Card 2: Birthdays (Peach Theme) */
+.card:nth-of-type(2) .card-content h2,
+.card:nth-of-type(2) .card-content p {
+  color: #b25400;
+  text-shadow: 0 0 3px #ffd6c2;
+}
+
+/* Card 3: Corporate (Mint Theme) */
+.card:nth-of-type(3) .card-content h2,
+.card:nth-of-type(3) .card-content p {
+  color: #00695c;
+  text-shadow: 0 0 3px #ccffeb;
+}
+
+/* Card 4: College (Purple/Blue Theme) */
+.card:nth-of-type(4) .card-content h2,
+.card:nth-of-type(4) .card-content p {
+  color: #3700b3;
+  text-shadow: 0 0 3px #dcd4ff;
+}
+
+.card-content a.event-link {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.card-content a.event-link:hover {
+  text-decoration: underline;
+  color: #ffe6f0;
+}
+
+

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <title>Search Weddings - Event Hub</title>
+  <link rel="stylesheet" href="eventlist.css" />
+  <link rel="stylesheet" href="search.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right top, #ffe6f0, #e0f7fa);
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #a10058;
+      margin-bottom: 30px;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .filters input,
+    .filters select {
+      padding: 10px;
+      border: 2px solid #d48eb5;
+      border-radius: 10px;
+      font-size: 16px;
+      background-color: #fff0f8;
+      box-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+    }
+    .event-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .event-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(255, 105, 180, 0.4);
+      transition: transform 0.3s;
+      width: 280px;
+      animation: fadeIn 0.5s ease forwards;
+      opacity: 0;
+    }
+    .event-card:hover {
+      transform: scale(1.03);
+    }
+    .event-card h3 {
+      color: #a10058;
+      margin-bottom: 10px;
+    }
+    .card-buttons {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .btn {
+      padding: 8px 12px;
+      background: linear-gradient(to right, #ff70a6, #ffb3c1);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background: linear-gradient(to right, #f55, #fbb);
+      box-shadow: 0 0 10px #ff80aa;
+    }
+    .welcome-wrapper {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .slideshow-container img {
+      width: 60%;
+      max-width: 600px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.3s ease;
+    }
+    .welcome-text h2 {
+      margin-top: 20px;
+      font-size: 28px;
+      color: #a10058;
+    }
+    .welcome-text p {
+      font-size: 18px;
+      color: #555;
+    }
+    .hidden {
+      display: none;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <a href="home.html" title="Home" class="home-icon">
+    <i class="fas fa-home"></i>
+  </a>
+
+  <h2>💒 Discover Your Dream Wedding</h2>
+
+  <div class="filters">
+    <select id="marriageTypeFilter" onchange="filterEvents()">
+      <option value="">💞 All Marriage Types</option>
+      <option value="destination">🌍 Destination</option>
+      <option value="local">🏠 Local</option>
+      <option value="temple">⛩️ Temple</option>
+      <option value="theme">🎭 Theme</option>
+    </select>
+
+    <input type="text" id="locationFilter" placeholder="📍 Enter location..." onkeyup="filterEvents()" />
+    <input type="date" id="dateFilter" onchange="filterEvents()" />
+  </div>
+
+  <div id="eventResults" class="event-grid hidden"></div>
+
+  <div id="animatedWelcome" class="welcome-wrapper">
+    <div class="slideshow-container">
+      <img id="slideImage" src="r.jpg" alt="Wedding" />
+    </div>
+    <div class="welcome-text">
+      <h2 class="fade-in">Plan Your Dream Wedding 💍</h2>
+      <p class="fade-in-delay">Discover venues, explore themes, and celebrate without stress.</p>
+    </div>
+  </div>
+
+ <script>
+let allEvents = [];
+
+// Fetch events from backend
+async function fetchEvents() {
+  try {
+    const res = await fetch("http://localhost:8075/api/event/type/Marriage"); // Using type-based endpoint
+    allEvents = await res.json();
+    console.log(allEvents); // For debugging
+  } catch (error) {
+    console.error("Error fetching events:", error);
+  }
+}
+
+// Call fetchEvents when page loads
+window.onload = fetchEvents;
+
+function filterEvents() {
+  const marriageType = document.getElementById("marriageTypeFilter").value.toLowerCase();
+  const location = document.getElementById("locationFilter").value.toLowerCase();
+  const date = document.getElementById("dateFilter").value;
+
+  const welcome = document.getElementById("animatedWelcome");
+  const results = document.getElementById("eventResults");
+
+  const filtered = allEvents.filter(e => {
+    const eventMarriageType = (e.marriageType || "").toLowerCase();
+    const eventLocation = (e.location || "").toLowerCase();
+    const eventDate = e.date || "";
+
+    return (
+      (marriageType === "" || eventMarriageType.includes(marriageType)) &&
+      (location === "" || eventLocation.includes(location)) &&
+      (date === "" || eventDate === date)
+    );
+  });
+
+  if (
+    marriageType === "" &&
+    location === "" &&
+    date === ""
+  ) {
+    welcome.classList.remove("hidden");
+    results.classList.add("hidden");
+  } else {
+    displayEvents(filtered);
+  }
+}
+
+function displayEvents(events) {
+  const container = document.getElementById("eventResults");
+  const welcome = document.getElementById("animatedWelcome");
+
+  welcome.classList.add("hidden");
+  container.classList.remove("hidden");
+  container.innerHTML = "";
+
+  if (events.length === 0) {
+    container.innerHTML = "<p>No matching events found.</p>";
+    return;
+  }
+
+  events.forEach((e, index) => {
+    const card = document.createElement("div");
+    card.className = "event-card";
+    card.style.animationDelay = `${index * 0.1}s`;
+
+    card.innerHTML = `
+      <p><strong>Type:</strong> ${e.type}${e.marriageType ? ` (${e.marriageType})` : ""}</p>
+      <p><strong>Location:</strong> ${e.location}</p>
+      <p><strong>Date:</strong> ${e.date}</p>
+      <p><strong>Price:</strong> ₹${e.price}</p>
+      <div class="card-buttons">
+        <a href="booking.html" class="btn">Book Now</a>
+        <button onclick='addToWishlist(${JSON.stringify(e)})' class="btn wishlist-btn">💖 Wishlist</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+</script>
+
+
+</body>
+</html>

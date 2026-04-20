@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feedback Form</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right top, #ffe9f4, #e6fbff);
+      color: #4a2a5e;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      background: linear-gradient(to right, #cc3380, #a366b8);
+      padding: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 0 12px rgba(204, 102, 178, 0.7);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #4b0049;
+      text-shadow: 2px 2px 10px #fce4ff;
+      letter-spacing: 2px;
+    }
+
+    header nav {
+      position: absolute;
+      right: 30px;
+    }
+
+    header nav a {
+      color: #4b0049;
+      font-size: 28px;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+      text-shadow: 0 0 8px #d699ff;
+    }
+
+    header nav a:hover {
+      color: #d699ff;
+      text-shadow: 0 0 16px #d699ff;
+      transform: scale(1.1);
+    }
+
+    main.feedback-container {
+      flex: 1;
+      width: 100%;
+      max-width: 460px;
+      margin: 40px 20px 60px;
+      background: #ffe6f5;
+      border-radius: 20px;
+      padding: 35px 30px;
+      box-shadow: 0 0 12px 3px #ffb3d7aa, inset 0 0 10px 1px #ff8cba;
+    }
+
+    form.feedback-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 16px;
+      margin-bottom: 6px;
+      font-weight: 700;
+      color: #8b529d;
+      font-size: 1.05rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 2px solid #f7a6d0;
+      font-size: 1rem;
+      color: #6b3d7d;
+      background-color: #fff0fa;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #ff66bf;
+      box-shadow: 0 0 8px #ff66bfaa;
+      background-color: #fff5fc;
+    }
+
+    button.btn {
+      margin-top: 28px;
+      padding: 14px;
+      background: linear-gradient(45deg, #ff99c8, #d699ff);
+      color: #3d004d;
+      font-weight: 900;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(215, 153, 255, 0.7), 0 0 10px rgba(255, 255, 255, 0.7);
+      transition: all 0.4s ease;
+      user-select: none;
+    }
+
+    button.btn:hover {
+      background: linear-gradient(45deg, #d699ff, #ff99c8);
+      color: #2a0036;
+      box-shadow: 0 8px 28px rgba(255, 128, 203, 0.9), 0 0 14px rgba(255, 255, 255, 0.9);
+      transform: scale(1.07);
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      main.feedback-container {
+        margin: 30px 15px 40px;
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Feedback</h1>
+    <nav>
+      <a href="home.html" title="Home"><i class="fas fa-home"></i></a>
+    </nav>
+  </header>
+
+  <main class="feedback-container">
+    <form class="feedback-form" onsubmit="handleFeedback(event)">
+      <label for="name">Your Name:</label>
+      <input type="text" id="name" required />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" required />
+
+      <label for="rating">Rating:</label>
+      <select id="rating" required>
+        <option value="">-- Choose --</option>
+        <option value="5">Excellent ★★★★★</option>
+        <option value="4">Very Good ★★★★</option>
+        <option value="3">Good ★★★</option>
+        <option value="2">Fair ★★</option>
+        <option value="1">Poor ★</option>
+      </select>
+
+      <label for="comments">Your Feedback:</label>
+      <textarea id="comments" rows="4" required></textarea>
+
+      <button type="submit" class="btn">Submit</button>
+    </form>
+  </main>
+
+  <script>
+   function handleFeedback(e) {
+  e.preventDefault();
+
+  const feedback = {
+    name: document.getElementById('name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    rating: parseInt(document.getElementById('rating').value),
+    comments: document.getElementById('comments').value.trim(),
+    message: document.getElementById('comments').value.trim() // reuse comments if no separate message
+  };
+
+  fetch("http://localhost:8080/api/feedback/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(feedback)
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Failed to submit feedback");
+    return res.text();
+  })
+  .then(msg => {
+    alert("Feedback submitted successfully!");
+    document.querySelector('.feedback-form').reset();
+  })
+  .catch(err => {
+    console.error("Error:", err);
+    alert("Feedback submission failed: " + err.message);
+  });
+}
+
+  </script>
+</body>
+</html>

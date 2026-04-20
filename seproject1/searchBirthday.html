@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <title>Search Birthdays - Event Hub</title>
+  <link rel="stylesheet" href="eventlist.css" />
+  <link rel="stylesheet" href="search.css">
+</head>
+<body>
+
+<a href="home.html" title="Home" class="home-icon">
+  <i class="fas fa-home"></i>
+</a>
+
+<h2>🎂 Discover Fun Birthday Events</h2>
+
+<div class="filters">
+  <select id="birthdayThemeFilter" onchange="filterEvents()">
+    <option value="">🎈 All Themes</option>
+    <option value="kids">🧸 Kids</option>
+    <option value="teen">🎧 Teen</option>
+    <option value="adult">🍹 Adult</option>
+    <option value="surprise">🎁 Surprise</option>
+  </select>
+
+  <input type="text" id="locationFilter" placeholder="📍 Enter location..." onkeyup="filterEvents()" />
+  <input type="date" id="dateFilter" onchange="filterEvents()" />
+</div>
+
+<div id="eventResults" class="event-grid hidden"></div>
+
+<div id="animatedWelcome" class="welcome-wrapper">
+  <div class="slideshow-container">
+    <img id="slideImage" src="b3.jpg" alt="Birthday Event" />
+  </div>
+  <div class="welcome-text">
+    <h2 class="fade-in">Plan an Unforgettable Birthday 🎉</h2>
+    <p class="fade-in-delay">Choose themes, surprise your guests, and celebrate joyfully!</p>
+  </div>
+</div>
+
+<script>
+let allEvents = [];
+
+async function fetchEvents() {
+  try {
+    const res = await fetch("http://localhost:8075/api/event");
+    const data = await res.json();
+
+    // Only Birthday events
+    allEvents = data.filter(e => e.type === "Birthday");
+
+    filterEvents();
+  } catch (error) {
+    console.error("Error fetching events:", error);
+  }
+}
+
+function filterEvents() {
+  const theme = document.getElementById("birthdayThemeFilter").value.toLowerCase();
+  const location = document.getElementById("locationFilter").value.toLowerCase();
+  const date = document.getElementById("dateFilter").value;
+
+  const welcome = document.getElementById("animatedWelcome");
+  const results = document.getElementById("eventResults");
+
+  const hasFilters = theme || location || date;
+
+  if (!hasFilters) {
+    welcome.classList.remove("hidden");
+    results.classList.add("hidden");
+    return;
+  }
+
+  const filtered = allEvents.filter(e => {
+    const eventTheme = (e.birthdayTheme || "").toLowerCase();
+    const eventLocation = (e.location || "").toLowerCase();
+    const eventDate = e.date || "";
+
+    return (
+      (theme === "" || eventTheme.includes(theme)) &&
+      (location === "" || eventLocation.includes(location)) &&
+      (date === "" || eventDate === date)
+    );
+  });
+
+  displayEvents(filtered);
+}
+
+function displayEvents(events) {
+  const container = document.getElementById("eventResults");
+  const welcome = document.getElementById("animatedWelcome");
+
+  welcome.classList.add("hidden");
+  container.classList.remove("hidden");
+  container.innerHTML = "";
+
+  if (events.length === 0) {
+    container.innerHTML = "<p>No matching birthday events found.</p>";
+    return;
+  }
+
+  events.forEach((e, index) => {
+    const card = document.createElement("div");
+    card.className = "event-card";
+    card.style.animationDelay = `${index * 0.1}s`;
+
+    card.innerHTML = `
+      <p><strong>Theme:</strong> ${e.birthdayTheme}</p>
+      <p><strong>Location:</strong> ${e.location}</p>
+      <p><strong>Date:</strong> ${e.date}</p>
+      <p><strong>Price:</strong> ₹${e.price}</p>
+      <div class="card-buttons">
+        <a href="booking.html" class="btn">Book Now</a>
+        <button onclick='addToWishlist(${JSON.stringify(e)})' class="btn wishlist-btn">💖 Wishlist</button>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+async function addToWishlist(eventObj) {
+  const userEmail = localStorage.getItem("userEmail");
+
+  if (!userEmail) {
+    alert("Please login first");
+    return;
+  }
+
+  const payload = {
+    ...eventObj,
+    email: userEmail
+  };
+
+  try {
+    const response = await fetch("http://localhost:8075/api/wishlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert("Event added to wishlist!");
+    } else {
+      alert("Failed to add to wishlist.");
+    }
+  } catch (error) {
+    console.error("Error adding to wishlist:", error);
+  }
+}
+
+const images = ["b1.jpg", "b2.jpg", "b3.jpg", "b2.jpg"];
+let current = 0;
+const slideImg = document.getElementById("slideImage");
+
+setInterval(() => {
+  current = (current + 1) % images.length;
+  slideImg.style.opacity = 0;
+
+  setTimeout(() => {
+    slideImg.src = images[current];
+    slideImg.style.opacity = 1;
+  }, 300);
+}, 2000);
+
+fetchEvents();
+</script>
+
+</body>
+</html>

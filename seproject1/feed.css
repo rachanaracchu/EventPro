@@ -1,0 +1,117 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right top, #ffdce5, #e0f0ff); /* brighter pastel pink → blue */
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+header {
+  background: linear-gradient(to right, #ff66b2, #66ccff);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 40px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+header h1 {
+  margin: 0 auto;
+  font-size: 36px;
+  font-weight: 800;
+  color: #2c1362;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6);
+  letter-spacing: 1px;
+}
+
+/* Home button (right aligned with feedback title) */
+nav a {
+  font-size: 24px;
+  color: white;
+  background: linear-gradient(to right, #7b2ff7, #f107a3); /* vibrant purple-pink */
+  padding: 10px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+nav a:hover {
+  background: linear-gradient(to right, #2b6cb0, #00b4db); /* new hover: bright blue/cyan */
+  color: #fff;
+  transform: scale(1.1);
+}
+
+
+nav a:hover {
+  background: linear-gradient(to right, #4e0fbd, #1f5df5);
+  transform: scale(1.1);
+}
+
+.feedback-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+}
+
+.feedback-form {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.feedback-form label {
+  display: block;
+  margin: 18px 0 6px;
+  font-weight: bold;
+  color: #5a2a6b;
+}
+
+.feedback-form input,
+.feedback-form select,
+.feedback-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  background-color: #fefafe;
+}
+
+.feedback-form input:focus,
+.feedback-form select:focus,
+.feedback-form textarea:focus {
+  outline: none;
+  border-color: #9c27b0;
+  box-shadow: 0 0 6px rgba(156, 39, 176, 0.3);
+}
+
+.btn {
+  background: linear-gradient(to right, #ff6ec4, #7873f5); /* bright pink → soft violet */
+  color: white;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 24px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: linear-gradient(to right, #f42fa7, #594ce7);
+}
+
+footer {
+  text-align: center;
+  padding: 18px;
+  background: #fff0f8;
+  color: #777;
+  font-size: 14px;
+  border-top: 1px solid #ddd;
+}

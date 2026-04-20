@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Event</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    background: #2b6cb0;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+
+  h2 {
+    text-align: center;
+    margin-top: 20px;
+    color: #2b6cb0;
+  }
+
+  .booking-container {
+    max-width: 500px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .booking-container label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  .booking-container input, .booking-container select, .booking-container button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  .booking-container button {
+    background: #2b6cb0;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  .booking-container button:hover {
+    background: #1e4e8c;
+  }
+
+  table {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  table th {
+    background: #2b6cb0;
+    color: white;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Book Your Event</h1>
+</header>
+
+<div class="booking-container">
+  <form id="bookingForm">
+    <label>Full Name:</label>
+    <input type="text" id="fullname" required>
+
+    <label>Email:</label>
+    <input type="email" id="email" required>
+
+    <label>Phone:</label>
+    <input type="tel" id="phone" required>
+
+    <label>Location:</label>
+    <input type="text" id="location" required>
+
+    <label>Event Type:</label>
+    <input type="text" id="eventType" required>
+
+    <label>Event Subtype:</label>
+    <input type="text" id="eventSubtype">
+
+    <label>Date:</label>
+    <input type="date" id="date">
+
+    <button type="submit">Book Now</button>
+  </form>
+</div>
+
+<script>
+async function fetchBookings() {
+  const res = await fetch("http://localhost:8075/api/bookings");
+  const data = await res.json();
+  const tbody = document.getElementById("bookingsTable");
+  tbody.innerHTML = "";
+
+  data.forEach(b => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${b.fullName}</td>
+      <td>${b.email}</td>
+      <td>${b.phone}</td>
+      <td>${b.location}</td>
+      <td>${b.eventType}</td>
+      <td>${b.eventSubtype || ""}</td>
+      <td>${b.bookingDate || ""}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+document.getElementById("bookingForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const booking = {
+    fullName: document.getElementById("fullname").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    location: document.getElementById("location").value,
+    eventType: document.getElementById("eventType").value,
+    eventSubtype: document.getElementById("eventSubtype").value,
+    bookingDate: document.getElementById("date").value || null
+  };
+
+  const res = await fetch("http://localhost:8075/api/bookings", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(booking)
+  });
+
+  if (res.ok) {
+    alert("Booking successful!");
+    document.getElementById("bookingForm").reset();
+    fetchBookings();
+  } else {
+    alert("Booking failed!");
+  }
+});
+
+</script>
+
+</body>
+</html>
